@@ -3,6 +3,12 @@ from api.hacker_news_apis import HackerNewsAPI
 import random
 import pytest
 import time
+from test_helpers.test_helpers import (
+    validate_comment_common_fields,
+    validate_deleted_comment,
+    validate_dead_comment,
+    validate_story_fields
+)
 
 class TestPrintTopStories:
 
@@ -46,26 +52,29 @@ class TestPrintTopStories:
             assert "type" in response and isinstance(response["type"], str)
 
             if response["type"] == "story":
-                assert "title" in response and isinstance(response["title"], str)
-                assert "by" in response and isinstance(response["by"], str)
-                if "url" in response:
-                    assert isinstance(response["url"], str)
-                if "text" in response:
-                    assert isinstance(response["text"], str)
-                if "score" in response:
-                    assert isinstance(response["score"], int)
-                if "descendants" in response:
-                    assert isinstance(response["descendants"], int)
+                validate_story_fields(response)
 
             elif response["type"] == "comment":
-                assert "parent" in response and isinstance(response["parent"], int)
-                assert "by" in response and isinstance(response["by"], str)
-                if "text" in response:
-                    assert isinstance(response["text"], str)
-                if "deleted" in response:
-                    assert isinstance(response["deleted"], bool)
-                if "dead" in response:
-                    assert isinstance(response["dead"], bool)
+                validate_comment_common_fields(response)
+                if response.get("deleted") or response.get("dead"):
+                    continue
+                else:
+                    assert "parent" in response and isinstance(response["parent"], int)
+                    assert "text" in response and isinstance(response["text"], str)
+
+
+    def test_deleted_comment_structure(self):
+        deleted_comment_id = 43920636
+        response = HackerNewsAPI.get_item(deleted_comment_id)
+        validate_comment_common_fields(response)
+        validate_deleted_comment(response)
+
+
+    def test_dead_comment_structure(self):
+        dead_comment_id = 43894689
+        response = HackerNewsAPI.get_item(dead_comment_id)
+        validate_comment_common_fields(response)
+        validate_dead_comment(response)
 
 
     def test_get_item_with_and_without_print_pretty_returns_same_result(self):
