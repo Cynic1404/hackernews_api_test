@@ -1,9 +1,8 @@
-from http.client import responses
-
 from api_helpers.api_helpers import ApiHelpers
 from api.hacker_news_apis import HackerNewsAPI
 import random
 import pytest
+import time
 
 class TestPrintTopStories:
 
@@ -18,6 +17,9 @@ class TestPrintTopStories:
         else:
             pytest.skip("No comments found for selected story.")
 
+    def test_nonexistent_item_id_returns_none(self):
+        response = HackerNewsAPI.get_item(999999999999)
+        assert response is None
 
     @pytest.mark.parametrize("wrong_id", ["a"," ", "", "%"])
     def test_check_item_api_with_wrong_url(self, wrong_id):
@@ -71,3 +73,10 @@ class TestPrintTopStories:
         pretty_list = HackerNewsAPI.get_item(random_story, print_pretty=False)
         not_pretty_list = HackerNewsAPI.get_item(random_story)
         assert pretty_list==not_pretty_list
+
+    def test_item_response_time_is_acceptable(self):
+        random_story = ApiHelpers.get_the_top_story()
+        start = time.time()
+        _ = HackerNewsAPI.get_item(random_story)
+        elapsed = time.time() - start
+        assert elapsed < 2.0
