@@ -64,3 +64,10 @@ class TestPrintTopStories:
                     assert isinstance(response["deleted"], bool)
                 if "dead" in response:
                     assert isinstance(response["dead"], bool)
+
+
+    def test_get_item_with_and_without_print_pretty_returns_same_result(self):
+        random_story = random.choice(ApiHelpers.get_top_stories_list())
+        pretty_list = HackerNewsAPI.get_item(random_story, print_pretty=False)
+        not_pretty_list = HackerNewsAPI.get_item(random_story)
+        assert pretty_list==not_pretty_list

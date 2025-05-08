@@ -8,7 +8,7 @@ class TestPrintTopStories:
         assert 0 < len(top_stories_list) <= 500
         assert all(isinstance(story_id, int) for story_id in top_stories_list)
 
-    def test_print_pretty_returns_the_same_result(self):
+    def test_top_stories_with_and_without_print_pretty_returns_same_result(self):
         pretty_list = HackerNewsAPI.get_top_stories(print_pretty=False)
         not_pretty_list = HackerNewsAPI.get_top_stories()
         assert pretty_list==not_pretty_list
