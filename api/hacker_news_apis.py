@@ -25,5 +25,16 @@ class HackerNewsAPI(ApiBase):
         response = requests.request("GET", url=full_url, headers=cls.headers, verify=False)
         return response.json()
 
+    @classmethod
+    def get_max_item(cls, print_pretty=True):
+        pretty_part_of_url = ""
+        if print_pretty:
+            pretty_part_of_url = "?print=pretty"
+        full_url = f"{ApiBase.root_url}/maxitem.json{pretty_part_of_url}"
+        response = requests.request("GET", url=full_url, headers=cls.headers, verify=False)
+        return response.json()
+
+
+    #https://hacker-news.firebaseio.com/v0/maxitem.json?print=pretty
 
 

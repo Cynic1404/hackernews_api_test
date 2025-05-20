@@ -24,7 +24,8 @@ class TestPrintTopStories:
             pytest.skip("No comments found for selected story.")
 
     def test_nonexistent_item_id_returns_none(self):
-        response = HackerNewsAPI.get_item(999999999999)
+        max_item = HackerNewsAPI.get_max_item()
+        response = HackerNewsAPI.get_item(max_item+1)
         assert response is None
 
     @pytest.mark.parametrize("wrong_id", ["a"," ", "", "%"])
