@@ -1,6 +1,5 @@
 import requests
 from api.api_base import ApiBase
-import json
 
 
 class HackerNewsAPI(ApiBase):
@@ -35,6 +34,5 @@ class HackerNewsAPI(ApiBase):
         return response.json()
 
 
-    #https://hacker-news.firebaseio.com/v0/maxitem.json?print=pretty
 
 
