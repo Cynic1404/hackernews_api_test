@@ -15,7 +15,7 @@ class TestPrintTopStories:
     def test_get_top_comment_to_the_top_story(self):
         top_story_id = ApiHelpers.get_the_top_story()
         if comments:=ApiHelpers.get_list_of_comments_to_story(top_story_id):
-            top_comment_id=comments[-1]
+            top_comment_id=comments[0]
             response = HackerNewsAPI.get_item(top_comment_id)
             assert response["type"] == "comment"
             assert response["parent"] == top_story_id
