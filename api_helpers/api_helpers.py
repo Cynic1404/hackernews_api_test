@@ -8,7 +8,7 @@ class ApiHelpers:
 
     @classmethod
     def get_the_top_story(cls):
-        return HackerNewsAPI.get_top_stories()[-1]
+        return HackerNewsAPI.get_top_stories()[0]
 
     @classmethod
     def get_list_of_comments_to_story(cls, story_id):
